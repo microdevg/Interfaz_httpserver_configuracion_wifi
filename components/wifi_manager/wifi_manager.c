@@ -24,7 +24,7 @@ extern const char styles[]  asm("_binary_styles_css_start");
 
 
 static httpd_handle_t server = NULL;
-
+static esp_event_handler_instance_t http_server = NULL;
 
 
 // Esta en false hasta que cargamos las credenciales
@@ -205,12 +205,12 @@ static void wifi_init_softap(void)
                                                         ESP_EVENT_ANY_ID,
                                                         &event_handler,
                                                         NULL,
-                                                        NULL));
+                                                        http_server));
     ESP_ERROR_CHECK(esp_event_handler_instance_register(IP_EVENT,
                                                         IP_EVENT_AP_STAIPASSIGNED,
                                                         &event_handler,
                                                         NULL,
-                                                        NULL));
+                                                        http_server));
 
     wifi_config_t wifi_config = {
         .ap = {
@@ -252,3 +252,32 @@ bool* wm_start( char** id,  char** pass){
 }
 
 
+
+
+
+
+
+void wm_close(){
+
+
+
+    ESP_ERROR_CHECK(nvs_flash_deinit());
+    // TCP/IP y event loop
+    ESP_ERROR_CHECK(esp_netif_deinit());
+    ESP_ERROR_CHECK(esp_event_loop_delete_default());
+
+    esp_netif_create_default_wifi_ap();
+
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+
+    // Registrar eventos WiFi e IP
+    ESP_ERROR_CHECK(esp_event_handler_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, http_server));
+    ESP_ERROR_CHECK(esp_event_handler_unregister(IP_EVENT, IP_EVENT_AP_STAIPASSIGNED,http_server));
+
+  
+    ESP_ERROR_CHECK(esp_wifi_stop());
+
+
+
+}

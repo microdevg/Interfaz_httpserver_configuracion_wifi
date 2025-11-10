@@ -25,6 +25,7 @@ void app_main(void)
         printf("x");
     }
 
+    wm_close();
     printf("SSID: %s\n", ssid);
     printf("PASS: %s\n", password);
     free(ssid);
