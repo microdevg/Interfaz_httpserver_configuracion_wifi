@@ -49,10 +49,10 @@ bool *ready = wm_start(&ssid, &password);
 
 ### Interfaz Visual
 
-<p align="center"><img src="./imgs/home.png" alt="Vista de la interfaz" width="400"></p>
+<p align="center"><img src="./imgs/home.png" alt="Vista de la interfaz" width="800"></p>
 
 
-<p align="center"><img src="./imgs/confirmation.png" alt="Vista de la interfaz" width="400"></p>
+<p align="center"><img src="./imgs/confirmation.png" alt="Vista de la interfaz" width="800"></p>
 
 
 ### Nota importante
@@ -68,4 +68,4 @@ Ruta recomendada dentro del menú:
 
 Component config  --->  HTTP Server  --->  Maximum HTTP Request Header Length
 
-<p align="center"><img src="./imgs/config_http_header_maxlen.png" alt="Vista de la interfaz" width="400"></p>
+<p align="center"><img src="./imgs/config_http_header_maxlen.png" alt="Vista de la interfaz" width="800"></p>
