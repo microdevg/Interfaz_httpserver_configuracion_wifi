@@ -1,0 +1,188 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #eaf2f8;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+#scan-btn, #toggle-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin: 10px 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#scan-btn:hover, #toggle-btn:hover {
+  background-color: #0056b3;
+}
+
+#status {
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+#notifications {
+  width: 100%;
+  max-width: 600px;
+  background-color: #17a2b8;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+#networks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  width: 100%;
+  max-width: 800px;
+  transition: max-height 0.3s ease;
+}
+
+.network {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: box-shadow 0.3s;
+}
+
+.network:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.network strong {
+  display: block;
+  font-size: 16px;
+  color: #007bff;
+  margin-bottom: 8px;
+}
+
+.details {
+  display: none;
+  margin-top: 10px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.network.open .details {
+  display: flex;
+}
+
+.details input {
+  padding: 8px;
+  width: 90%;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.details label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.details .btn {
+  padding: 8px 16px;
+  width: 80%;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-top: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-select {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.btn-select:hover {
+  background-color: #e0a800;
+}
+
+.btn-connect {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-connect:hover {
+  background-color: #218838;
+}
+
+
+.signal {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  height: 12px;
+}
+
+.bar {
+  width: 6px;
+  border-radius: 2px;
+  background-color: #ccc;
+}
+
+.bar.on {
+  background-color: #007bff;
+}
+
+.bar.off {
+  background-color: #e0e0e0;
+}
+
+
+#sensors-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.sensor-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sensor-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #0077cc;
+  margin-bottom: 8px;
+}
+
+.sensor-value {
+  font-size: 20px;
+  color: #333;
+}
