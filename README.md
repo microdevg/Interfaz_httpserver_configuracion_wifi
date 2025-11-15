@@ -71,7 +71,9 @@ Component config  --->  HTTP Server  --->  Maximum HTTP Request Header Length
 <p align="center"><img src="./imgs/config_http_header_maxlen.png" alt="Vista de la interfaz" width="800"></p>
 
 
-### Siguientes paso:
-- Configurar un servidor DNS.
+
 
 ### Se agrego servidor dns. Por default es esp32-server.local
+
+### Probemas Comunes:
+- Si elegimos que la red WiFi del ESP32 tenga contraseña debe ser de tamaño 8 o superior.
