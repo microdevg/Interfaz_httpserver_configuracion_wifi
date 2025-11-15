@@ -73,3 +73,5 @@ Component config  --->  HTTP Server  --->  Maximum HTTP Request Header Length
 
 ### Siguientes paso:
 - Configurar un servidor DNS.
+
+### Se agrego servidor dns. Por default es esp32-server.local
