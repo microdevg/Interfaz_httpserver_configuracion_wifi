@@ -1,3 +1,4 @@
+#include "sdkconfig.h"
 #include <stdio.h>
 #include "wifi_manager.h"
 #include "esp_netif.h"
@@ -5,21 +6,17 @@
 #include "esp_wifi.h"
 #include "esp_log.h"
 #include "esp_http_server.h"
+#include "mdns.h"
 #include <stdbool.h>
 
-
-
-
-#define NAME_ESP_WIFI       "WMESP32"
-#define PASS_ESP_WIFI       ""      // Si no hay contraseña se configura como open.
-
-
+#define NAME_ESP_WIFI       CONFIG_WIFI_SSID
+#define PASS_ESP_WIFI       CONFIG_WIFI_PASSWORD
+#define DNS_NAME_PAGE       CONFIG_DNS_SERVER_NAME
 
 const char* TAG = "Wifi Manager";
 extern const char home_page[]   asm("_binary_home_html_start");
 extern const char confirmation_page[]   asm("_binary_confirmation_html_start");
-extern const char indexjs[]  asm("_binary_index_js_start");
-extern const char styles[]  asm("_binary_styles_css_start");
+
 
 
 
@@ -106,6 +103,22 @@ static esp_err_t wifi_config_post_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
+static void dns_init(){
+
+    // Dns configuracion
+    esp_err_t err = mdns_init();
+    if (err) {
+        ESP_LOGE(TAG, "MDNS Init failed: %d", err);
+    }
+    else{
+        ESP_ERROR_CHECK(mdns_hostname_set(CONFIG_DNS_SERVER_NAME));
+        ESP_ERROR_CHECK(mdns_instance_name_set("Configuracion de Microbot"));
+        ESP_LOGI(TAG, "mDNS iniciado. Nombre del host: %s.local\n",CONFIG_DNS_SERVER_NAME);
+    }
+}
+
+
+
 static esp_err_t home_get_handler(httpd_req_t *req)
 {
     httpd_resp_set_type(req, "text/html");
@@ -167,30 +180,19 @@ static void event_handler(void *arg, esp_event_base_t event_base,
         ESP_LOGI(TAG, "Un cliente obtuvo IP, iniciando servidor HTTP...");
         if (server == NULL) {
             server = start_webserver();
+            dns_init();
         }
     }
     else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_AP_STOP) {
-        ESP_LOGI(TAG, "Punto de acceso detenido, deteniendo servidor HTTP...");
-        if (server) {
-            httpd_stop(server);
-            server = NULL;
-        }
+        ESP_LOGI(TAG, "Punto de acceso detenido, deteniendo servidor HTTP..."); 
     }
 }
 
 
-
-
-
-
-
-
-
-// Inicializar WiFi en modo Access Point
-static void wifi_init_softap(void)
-{
-
-    ESP_ERROR_CHECK(nvs_flash_init());
+bool* wm_start( char** id,  char** pass){
+    _id = id;
+    _pass = pass;
+ ESP_ERROR_CHECK(nvs_flash_init());
     // TCP/IP y event loop
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
@@ -230,25 +232,11 @@ static void wifi_init_softap(void)
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start());
-
     ESP_LOGI(TAG, "WiFi AP iniciado. SSID:%s Password:%s Canal:%d",
-             wifi_config.ap.ssid, wifi_config.ap.password, wifi_config.ap.channel);
-}
-
-
-
-
-
-
-
-bool* wm_start( char** id,  char** pass){
-
-    _id = id;
-    _pass = pass;
-    wifi_init_softap();
-    start_webserver();
+    wifi_config.ap.ssid, wifi_config.ap.password, wifi_config.ap.channel);    
 
     return &credential_flags;
+  
 }
 
 
@@ -258,26 +246,18 @@ bool* wm_start( char** id,  char** pass){
 
 
 void wm_close(){
-
-
-
-    ESP_ERROR_CHECK(nvs_flash_deinit());
-    // TCP/IP y event loop
-    ESP_ERROR_CHECK(esp_netif_deinit());
-    ESP_ERROR_CHECK(esp_event_loop_delete_default());
-
-    esp_netif_create_default_wifi_ap();
-
-    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
-
-    // Registrar eventos WiFi e IP
+    if(http_server){
     ESP_ERROR_CHECK(esp_event_handler_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, http_server));
     ESP_ERROR_CHECK(esp_event_handler_unregister(IP_EVENT, IP_EVENT_AP_STAIPASSIGNED,http_server));
-
-  
+    httpd_stop(server);
+}
+    ESP_ERROR_CHECK(esp_event_loop_delete_default());
     ESP_ERROR_CHECK(esp_wifi_stop());
-
-
-
+    ESP_ERROR_CHECK(nvs_flash_deinit());
+    // TCP/IP y event loop
+    // La funcion esp_netif_deinit() nunca debe llamarse.  
+    // una vez iniciado el stack wifi 
+    // podemos deshabilitar funciones pero no el stack.
+    //Fuente :https://espressif-docs.readthedocs-hosted.com/projects/esp-idf/zh-cn/release-v4.1/api-reference/network/esp_netif.html
+ 
 }

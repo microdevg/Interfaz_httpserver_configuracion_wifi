@@ -20,7 +20,7 @@ Una vez que el formulario es enviado, el componente:
 
 ##  Interfaz Web
 
-La interfaz consiste en una página HTML servida por el ESP32, que presenta un formulario similar a:
+La interfaz consiste en una página HTML servida por el ESP32 (WMESP32) en la direccion 192.168.4.1, que presenta un formulario similar a:
 
 
 ```c
@@ -43,7 +43,7 @@ bool *ready = wm_start(&ssid, &password);
     free(ssid);
     free(password);
 
-
+ 
 
 ```
 
@@ -69,3 +69,7 @@ Ruta recomendada dentro del menú:
 Component config  --->  HTTP Server  --->  Maximum HTTP Request Header Length
 
 <p align="center"><img src="./imgs/config_http_header_maxlen.png" alt="Vista de la interfaz" width="800"></p>
+
+
+### Siguientes paso:
+- Configurar un servidor DNS.

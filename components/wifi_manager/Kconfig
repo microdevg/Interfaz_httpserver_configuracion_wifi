@@ -1,0 +1,26 @@
+menu "Opciones de configuración del Servidor HTTPS ESP32"
+
+    config WIFI_SSID
+        string "Nombre de la red Wi-Fi (SSID)"
+        default "WMESP32"
+        help
+            Establece el SSID de la red Wi-Fi a la que se conectará el ESP32.
+            Esto corresponderá a #define NAME_ESP_WIFI.
+
+    config WIFI_PASSWORD
+        string "Contraseña de la red Wi-Fi (PSK)"
+        default ""
+        help
+            Establece la contraseña de la red Wi-Fi (PSK).
+            Déjalo vacío si la red es abierta.
+            Esto corresponderá a #define PASS_ESP_WIFI.
+
+    config DNS_SERVER_NAME
+        string "Nombre de Host DNS del Servidor"
+        default "esp32-server"
+        help
+            Establece el nombre que se usará para acceder al servidor a través de DNS
+            (ej: http://esp32-server.local). Debe ser único en la red.
+            Esto corresponderá a #define DNS_NAME_PAGE.
+
+endmenu

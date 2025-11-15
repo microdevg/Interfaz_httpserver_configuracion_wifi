@@ -3,16 +3,7 @@
 #include <unistd.h>
 
 
-void app(void){
-    printf("Everthing ok\n");
-}
 
-void error (void){
-    printf("Error\n");
-
-
-
-}
 void app_main(void)
 {
     char *ssid = NULL;
